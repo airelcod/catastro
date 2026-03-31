@@ -1,0 +1,840 @@
+<!-- Logos: [Municipio Torres, Catastro, PST10] !-->
+<!-- Solicitud de Plano de Mensura !-->
+<!-- Valor del Tramite de Plano de Mensura !-->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title>Calculadora de Valores Catastrales - Municipio Torres</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <link rel="icon" href="main.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+		body::before {
+			content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+			background-image: url('carora.jpg');
+			background-size:cover;
+			filter: blur(5px);
+			z-index: -2;
+		}
+
+        .main-container {
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        /* Header más cuadrado, sin colores llamativos */
+        .header {
+            background: rgba(255,255,255,.4);
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 24px;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+        }
+
+        .header-left, .header-center, .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-left { justify-content: flex-start; flex: 1; }
+        .header-center { justify-content: center; flex: 1; }
+        .header-right { justify-content: flex-end; flex: 1; }
+
+        .header img {
+            height: 45px;
+            object-fit: contain;
+        }
+
+        .title-p {
+            font-size: 14px;
+            font-weight: 500;
+            color: #495057;
+            background: #f8f9fa;
+            padding: 6px 12px;
+            border-radius: 4px;
+        }
+
+        /* Tarjeta de tasas */
+        .rates-card {
+            background: rgba(255,255,255,.4);
+            border-radius: 4px;
+            padding: 16px 24px;
+            margin-bottom: 12px;
+			margin-top: 24px;
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            flex-wrap: wrap;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #dee2e6;
+        }
+
+        .rate-item {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            font-size: 15px;
+        }
+
+        .rate-item .currency {
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .rate-item .value {
+            font-weight: 500;
+            color: #2c3e50;
+            font-size: 16px;
+        }
+
+        /* Pestañas */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .tab-button {
+            padding: 8px 16px;
+            background: rgba(255,255,255,.4);
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            color: #495057;
+            transition: all 0.2s ease;
+        }
+
+        .tab-button:hover {
+            background: #f8f9fa;
+        }
+
+        .tab-button.active {
+            background: #2c3e50;
+            color: white;
+            border-color: #2c3e50;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Grid de dos columnas */
+        .two-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        /* Tarjetas de cálculo */
+        .calculation-card, .single-card {
+            background: rgba(255,255,255,.5);
+            border-radius: 4px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #dee2e6;
+        }
+
+        .card-header {
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #212529;
+        }
+
+        .card-subtitle {
+            font-size: 12px;
+            color: rgba(0,0,0,.5);
+            margin-top: 4px;
+        }
+
+        /* Formularios */
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: rgba(0,0,0,.7);
+            margin-bottom: 6px;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 14px;
+            font-family: inherit;
+            background: white;
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: #868e96;
+        }
+
+        /* Checkbox */
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 16px 0;
+            padding: 8px 0;
+        }
+
+        .checkbox-group input {
+            width: 16px;
+            height: 16px;
+            margin: 0;
+        }
+
+        /* Resultados */
+        .result-box {
+            background: rgba(255,255,255,.4);
+            border-radius: 4px;
+            padding: 16px;
+            text-align: center;
+            margin-top: 16px;
+            border: 1px solid #e9ecef;
+        }
+
+        .result-value {
+            font-size: 22px;
+            font-weight: 700;
+            color: #212529;
+        }
+
+        .result-label {
+            font-size: 11px;
+            color: rgba(0,0,0,.5);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 4px;
+        }
+
+        /* Tarjeta de total general */
+        .total-card {
+            background: rgba(255,255,255,.4);
+            border-radius: 4px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid #dee2e6;
+        }
+
+        .total-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #495057;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .total-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #212529;
+        }
+
+        .total-sub {
+            font-size: 11px;
+            color: rgba(255,255,255,.7);
+            margin-top: 4px;
+        }
+
+        /* Campo UCD manual */
+        .ucd-manual {
+            background: rgba(255,255,255,.2);
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .ucd-manual label {
+            font-weight: 500;
+            font-size: 14px;
+            color: rgba(0,0,0,.8);
+        }
+
+        .ucd-manual input {
+            width: 180px;
+            margin: 0;
+        }
+
+        .ucd-manual small {
+            color: #868e96;
+            font-size: 12px;
+        }
+
+        .ucd-manual .auto-value {
+            color: rgba(0,0,0,.7);
+            font-weight: 500;
+        }
+
+        hr {
+            margin: 16px 0;
+            border: none;
+            border-top: 1px solid #e9ecef;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body { padding: 12px; }
+            .header {
+                flex-direction: column;
+                gap: 12px;
+                padding: 12px;
+            }
+            .header-left, .header-center, .header-right {
+                justify-content: center;
+                width: 100%;
+            }
+            .header img { height: 35px; }
+            .two-columns { grid-template-columns: 1fr; gap: 16px; }
+            .tab-button { padding: 6px 12px; font-size: 12px; flex: 1; text-align: center; }
+            .rates-card { padding: 12px; gap: 16px; }
+            .result-value { font-size: 18px; }
+            .total-value { font-size: 24px; }
+            .calculation-card, .single-card { padding: 16px; }
+            .ucd-manual { flex-direction: column; align-items: flex-start; }
+            .ucd-manual input { width: 100%; }
+        }
+
+        .tab-content.active {
+            animation: fadeIn 0.2s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+<div class="main-container">
+    <!-- Header con logos -->
+    <div class="header">
+        <div class="header-left">
+            <img src="gob.png" alt="Gobierno" onerror="this.style.display='none'">
+        </div>
+        <div class="header-center">
+            <img src="log.png" alt="Municipio Torres" onerror="this.style.display='none'">
+        </div>
+        <div class="header-right">
+            <img src="logopst.png" alt="Catastro" onerror="this.style.display='none'">
+        </div>
+    </div>
+
+    <!-- Pestañas -->
+    <div class="tabs">
+        <button class="tab-button active" onclick="openTab(event, 'tab-pvt-construccion')">Valor del Inmueble</button>
+        <button class="tab-button" onclick="openTab(event, 'tab-plano')">Plano de Mensura</button>
+        <button class="tab-button" onclick="openTab(event, 'tab-tramites')">Otros Trámites</button>
+    </div>
+
+    <!-- Pestaña 1: PVT + Construcción -->
+    <div id="tab-pvt-construccion" class="tab-content active">
+        <div class="two-columns">
+            <!-- Columna Terreno -->
+            <div class="calculation-card">
+                <div class="card-header">
+                    <div class="card-title">Valor del Terreno</div>
+                    <div class="card-subtitle">Según tipo y área</div>
+                </div>
+                <div class="form-group">
+                    <label>Tipo de Terreno</label>
+                    <select id="tipoTerreno">
+                        <option value="">-- Selecciona --</option>
+                        <option value="A">A - Residencial/Comercial Tipo A</option>
+                        <option value="B">B - Residencial/Comercial Tipo B</option>
+                        <option value="C">C - Residencial/Comercial Tipo C</option>
+                        <option value="D1">D1 - Urbanizable hasta 5.000 m²</option>
+                        <option value="D2">D2 - Urbanizable 5.001 a 50.000 m²</option>
+                        <option value="D3">D3 - Urbanizable desde 50.001 m²</option>
+                        <option value="E1">E1 - Poligonal Urbana hasta 5.000 m²</option>
+                        <option value="E2">E2 - Poligonal Urbana 5.001 a 50.000 m²</option>
+                        <option value="E3">E3 - Poligonal Urbana desde 50.001 m²</option>
+                        <option value="F1">F1 - Rural hasta 5.000 m²</option>
+                        <option value="F2">F2 - Rural 5.001 a 50.000 m²</option>
+                        <option value="F3">F3 - Rural desde 50.001 m²</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Área del Terreno (m²)</label>
+                    <input type="number" id="areaTerreno" placeholder="Ej: 500" step="any">
+                </div>
+                <div class="result-box">
+                    <div class="result-value" id="resultadoVT">0,00 Bs</div>
+                    <div class="result-label">Valor del Terreno</div>
+                </div>
+            </div>
+            <!-- Columna Construcción -->
+            <div class="calculation-card">
+                <div class="card-header">
+                    <div class="card-title">Valor de Construcción</div>
+                    <div class="card-subtitle">Según tipo, zona y área</div>
+                </div>
+                <div class="form-group">
+                    <label>Tipo de Construcción</label>
+                    <select id="tipoConstruccion">
+                        <option value="">-- Selecciona --</option>
+                        <option value="multifamiliar">Vivienda Multifamiliar</option>
+                        <option value="unifamiliar">Vivienda Unifamiliar</option>
+                        <option value="comercio">Comercio</option>
+                        <option value="oficinas">Oficinas</option>
+                        <option value="industria">Industria</option>
+                        <option value="hoteles">Hoteles y Similares</option>
+                        <option value="clubes">Clubes y Marinas</option>
+                    </select>
+                </div>
+                <div id="subcategoriaContainer" style="display:none;">
+                    <div class="form-group"><label>Subtipo</label><select id="subcategoriaConstruccion"></select></div>
+                </div>
+                <div id="zonaContainer" style="display:none;">
+                    <div class="form-group"><label>Zona (A-F)</label>
+                        <select id="zonaConstruccion">
+                            <option value="A">A</option><option value="B">B</option><option value="C">C</option>
+                            <option value="D">D</option><option value="E">E</option><option value="F">F</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="phContainer" style="display:none;">
+                    <div class="form-group"><label>Propiedad Horizontal</label>
+                        <select id="phConstruccion">
+                            <option value="conph">Con PH</option>
+                            <option value="sinph">Sin PH</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="industriaContainer" style="display:none;">
+                    <div class="form-group"><label>Factor Industrial</label>
+                        <select id="industriaFactor">
+                            <option value="I1">I1</option><option value="I2">I2</option><option value="I3">I3</option>
+                            <option value="I4">I4</option><option value="I5">I5</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Área de Construcción (m²)</label>
+                    <input type="number" id="areaConstruccion" placeholder="Ej: 120" step="any">
+                </div>
+                <div class="result-box">
+                    <div class="result-value" id="resultadoConstruccion">0,00 Bs</div>
+                    <div class="result-label">Valor de Construcción</div>
+                </div>
+            </div>
+        </div>
+        <!-- Total General -->
+        <div class="total-card">
+            <div class="total-label">VALOR GENERAL DEL INMUEBLE</div>
+            <div class="total-value" id="valorTotalInmueble">0,00 Bs</div>
+            <div class="total-sub">Terreno + Construcción</div>
+        </div>
+    </div>
+
+    <!-- Pestaña 2: Plano de Mensura -->
+    <div id="tab-plano" class="tab-content">
+        <div class="single-card">
+            <div class="card-header">
+                <div class="card-title">Solicitud de Plano de Mensura</div>
+                <div class="card-subtitle">Trámite para levantamiento topográfico</div>
+            </div>
+            <div class="result-box" style="margin-bottom:16px;">
+                <div class="result-value">15 UCD</div>
+                <div class="result-label">Valor base</div>
+            </div>
+            <div class="checkbox-group">
+                <input type="checkbox" id="incluirInspeccion">
+                <label for="incluirInspeccion">Incluir Inspección General</label>
+            </div>
+            <div id="camposInspeccion" style="display:none;">
+                <div class="form-group">
+                    <label>Metros cuadrados del inmueble</label>
+                    <input type="number" id="metrosPlanoInspeccion" placeholder="m²" step="any">
+                </div>
+            </div>
+            <div class="result-box">
+                <div class="result-value" id="resultadoPlano">0,00 Bs</div>
+                <div class="result-label">Total a pagar</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pestaña 3: Otros Trámites -->
+    <div id="tab-tramites" class="tab-content">
+        <div class="single-card">
+            <div class="card-header">
+                <div class="card-title">Otros Trámites Catastrales</div>
+                <div class="card-subtitle">Seleccione el trámite</div>
+            </div>
+            <div class="form-group">
+                <label>Tipo de Trámite</label>
+                <select id="tipoTramite">
+                    <option value="">-- Selecciona --</option>
+                    <option value="modificacion">Modificación del inmueble (7 UCD)</option>
+                    <option value="cambioPropietario">Cambio de propietario (5 UCD)</option>
+                    <option value="rectificacion">Rectificación catastral (5 UCD)</option>
+                    <option value="parcelamiento">Parcelamiento (15 UCD)</option>
+                    <option value="reparcelamiento">Reparcelamiento (15 UCD)</option>
+                    <option value="urbanizaciones">Permisos para Urbanizaciones (15 UCD)</option>
+                    <option value="remodelacion">Permiso de remodelación (15 UCD)</option>
+                    <option value="construccion">Permiso de construcción (15 UCD)</option>
+                    <option value="certificacionPlaca">Certificación Placa Catastral (3 UCD)</option>
+                    <option value="otrasSolicitudes">Otras solicitudes (15 UCD)</option>
+                    <option value="inspeccionBebidas">Inspección expendio de bebidas (0.20 × m²)</option>
+                    <option value="copiasCertificados">Copias y Certificados</option>
+                    <option value="usoBienesPublicos">Uso de bienes públicos (0.10 × m² × días)</option>
+                    <option value="habilitacionServicios">Habilitación de Servicios (100 UCD)</option>
+                </select>
+            </div>
+            <div id="camposAdicionales" style="display:none;"></div>
+            <div class="result-box">
+                <div class="result-value" id="resultadoTramite">0,00 Bs</div>
+                <div class="result-label">Total a pagar</div>
+            </div>
+        </div>
+    </div>
+
+	<!-- Tarjeta de tasas -->
+    <div class="rates-card">
+        <div class="rate-item"><span class="currency">USD BCV:</span><span class="value" id="dolarV">--</span></div>
+        <div class="rate-item"><span class="currency">EUR:</span><span class="value" id="euroV">--</span></div>
+    </div>
+
+    <!-- Panel de UCD manual -->
+    <div class="ucd-manual">
+        <label>Valor de la UCD (Unidad de Crédito Distrital):</label>
+        <input type="number" id="ucdManual" step="any" placeholder="Usar tasa automática">
+        <span class="auto-value" id="ucdAutoDisplay"></span>
+    </div>
+</div>
+
+<script>
+    // Variables
+    let tasaDolarActual = 0, tasaEuroActual = 0, tasaMayorActual = 0;
+    let ucdManualValor = null; // null = usar tasa automática
+
+    // Factores
+    const factoresTerreno = {
+        'A':0.60, 'B':0.45, 'C':0.35,
+        'D1':0.30, 'D2':0.20, 'D3':0.18,
+        'E1':0.25, 'E2':0.20, 'E3':0.18,
+        'F1':0.20, 'F2':0.18, 'F3':0.15
+    };
+
+    const construccionData = {
+        multifamiliar: { factores:{'A':3.00,'B':2.80,'C':2.50,'D':2.30,'E':2.00,'F':2.00} },
+        unifamiliar: {
+            subtipos: {
+                'quinta':{label:'Quinta',factores:{'A':9,'B':8,'C':5,'D':4.8,'E':3,'F':3.5}},
+                'casaquinta':{label:'Casa/Quinta',factores:{'A':9,'B':8,'C':5,'D':4.8,'E':3,'F':3.5}},
+                'convencional':{label:'Casa Convencional',factores:{'A':5,'B':3,'C':2.5,'D':2,'E':1.5,'F':1}},
+                'colonial':{label:'Casa Colonial',factores:{'A':4,'B':3,'C':2.5,'D':2,'E':1.5,'F':1}},
+                'gmvv':{label:'GMVV',factores:{'A':2,'B':1.7,'C':1.5,'D':1,'E':0.8,'F':0.8}},
+                'autoconstruccion':{label:'Autoconstrucción',factores:{'A':1.8,'B':1.5,'C':1.3,'D':1,'E':0.8,'F':0.8}}
+            }
+        },
+        comercio: { ph:{ 'conph':{'A':10.5,'B':7.15,'C':6.8,'D':5.85,'E':4.7,'F':3.5}, 'sinph':{'A':9.5,'B':7,'C':6.5,'D':5.5,'E':4.5,'F':4} } },
+        oficinas: { ph:{ 'conph':{'A':10.5,'B':7.15,'C':6.8,'D':5.85,'E':4.7,'F':3.5}, 'sinph':{'A':9.5,'B':7,'C':6.5,'D':5.5,'E':4.5,'F':4} } },
+        industria: { ph:{ 'conph':{'I1':7,'I2':6.5,'I3':3,'I4':3,'I5':3}, 'sinph':{'I1':6,'I2':5.5,'I3':4.5,'I4':4,'I5':3} } },
+        hoteles: { factorFijo:6.5 },
+        clubes: { factorFijo:5.5 }
+    };
+
+    // Funciones auxiliares
+    function format(num) {
+        if(isNaN(num)) return '0,00';
+        let p = num.toFixed(2).split('.');
+        p[0] = p[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        return p[0] + ',' + p[1];
+    }
+
+    function getUCD() {
+        if (ucdManualValor !== null && !isNaN(ucdManualValor) && ucdManualValor > 0) {
+            return ucdManualValor;
+        }
+        return tasaMayorActual;
+    }
+
+    function inspeccionUSD(m) {
+        if(m <= 0) return 0;
+        if(m <= 500) return 0.05 * m;
+        if(m <= 5000) return 0.03 * m;
+        return 0.01 * m;
+    }
+
+    async function getRate(url) {
+        try {
+            let r = await fetch(url);
+            if(!r.ok) return null;
+            return await r.json();
+        } catch(e) { return null; }
+    }
+
+    async function updateRates() {
+        let [d, e] = await Promise.all([
+            getRate('https://ve.dolarapi.com/v1/dolares'),
+            getRate('https://ve.dolarapi.com/v1/euros')
+        ]);
+        if(d && d[0]) tasaDolarActual = d[0].promedio;
+        if(e && e[0]) tasaEuroActual = e[0].promedio;
+        tasaMayorActual = Math.max(tasaDolarActual, tasaEuroActual);
+        
+        document.getElementById('dolarV').innerHTML = format(tasaDolarActual) + ' Bs';
+        document.getElementById('euroV').innerHTML = format(tasaEuroActual) + ' Bs';
+        
+        // Mostrar valor automático de UCD
+        const autoSpan = document.getElementById('ucdAutoDisplay');
+        if(autoSpan) autoSpan.innerHTML = `(Automático: ${format(tasaMayorActual)} Bs)`;
+        
+        calcAll();
+    }
+
+    // Cálculos
+    function calcTerreno() {
+        let t = document.getElementById('tipoTerreno').value;
+        let a = parseFloat(document.getElementById('areaTerreno').value);
+        if(!t || isNaN(a) || a <= 0) {
+            document.getElementById('resultadoVT').innerHTML = '0,00 Bs';
+            return 0;
+        }
+        let val = factoresTerreno[t] * getUCD() * a;
+        document.getElementById('resultadoVT').innerHTML = format(val) + ' Bs';
+        return val;
+    }
+
+    function calcConstruccion() {
+        let tipo = document.getElementById('tipoConstruccion').value;
+        let area = parseFloat(document.getElementById('areaConstruccion').value);
+        if(!tipo || isNaN(area) || area <= 0) {
+            document.getElementById('resultadoConstruccion').innerHTML = '0,00 Bs';
+            return 0;
+        }
+        let factor = 0;
+        let d = construccionData[tipo];
+        if(tipo === 'multifamiliar') {
+            factor = d.factores[document.getElementById('zonaConstruccion').value];
+        } else if(tipo === 'unifamiliar') {
+            let sub = document.getElementById('subcategoriaConstruccion').value;
+            let zona = document.getElementById('zonaConstruccion').value;
+            factor = d.subtipos[sub]?.factores[zona] || 0;
+        } else if(tipo === 'comercio' || tipo === 'oficinas') {
+            let ph = document.getElementById('phConstruccion').value;
+            let zona = document.getElementById('zonaConstruccion').value;
+            factor = d.ph[ph]?.[zona] || 0;
+        } else if(tipo === 'industria') {
+            let ph = document.getElementById('phConstruccion').value;
+            let ind = document.getElementById('industriaFactor').value;
+            factor = d.ph[ph]?.[ind] || 0;
+        } else if(tipo === 'hoteles' || tipo === 'clubes') {
+            factor = d.factorFijo;
+        }
+        let val = factor * getUCD() * area;
+        document.getElementById('resultadoConstruccion').innerHTML = format(val) + ' Bs';
+        return val;
+    }
+
+    function calcTotal() {
+        let t = parseFloat(document.getElementById('resultadoVT').innerHTML.replace(/[^0-9,-]/g, '').replace(',', '.')) || 0;
+        let c = parseFloat(document.getElementById('resultadoConstruccion').innerHTML.replace(/[^0-9,-]/g, '').replace(',', '.')) || 0;
+        document.getElementById('valorTotalInmueble').innerHTML = format(t + c) + ' Bs';
+    }
+
+    function calcPlano() {
+        let incluir = document.getElementById('incluirInspeccion').checked;
+        let ins = 0;
+        if(incluir) {
+            let m = parseFloat(document.getElementById('metrosPlanoInspeccion')?.value);
+            if(!isNaN(m) && m > 0) ins = inspeccionUSD(m);
+        }
+        let total = (15 + ins) * getUCD();
+        document.getElementById('resultadoPlano').innerHTML = format(total) + ' Bs';
+    }
+
+    function showExtraFields(tipo) {
+        let div = document.getElementById('camposAdicionales');
+        if(tipo === 'inspeccionBebidas') {
+            div.style.display = 'block';
+            div.innerHTML = '<div class="form-group"><label>m²</label><input type="number" id="metrosBebidas" placeholder="m²" step="any"></div>';
+            document.getElementById('metrosBebidas')?.addEventListener('input', calcTramite);
+        } else if(tipo === 'copiasCertificados') {
+            div.style.display = 'block';
+            div.innerHTML = '<div class="form-group"><label>N° folios</label><input type="number" id="numFolios" placeholder="Folios" step="1" min="1"></div>';
+            document.getElementById('numFolios')?.addEventListener('input', calcTramite);
+        } else if(tipo === 'usoBienesPublicos') {
+            div.style.display = 'block';
+            div.innerHTML = '<div class="form-group"><label>m²</label><input type="number" id="metrosUso" placeholder="m²" step="any"></div><div class="form-group"><label>Días</label><input type="number" id="diasUso" placeholder="Días" step="1" min="1"></div>';
+            document.getElementById('metrosUso')?.addEventListener('input', calcTramite);
+            document.getElementById('diasUso')?.addEventListener('input', calcTramite);
+        } else {
+            div.style.display = 'none';
+            div.innerHTML = '';
+        }
+    }
+
+    function calcTramite() {
+        let tipo = document.getElementById('tipoTramite').value;
+        if(!tipo) {
+            document.getElementById('resultadoTramite').innerHTML = '0,00 Bs';
+            return;
+        }
+        let valUCD = 0;
+        switch(tipo) {
+            case 'modificacion': valUCD = 7; break;
+            case 'cambioPropietario': valUCD = 5; break;
+            case 'rectificacion': valUCD = 5; break;
+            case 'parcelamiento': valUCD = 15; break;
+            case 'reparcelamiento': valUCD = 15; break;
+            case 'urbanizaciones': valUCD = 15; break;
+            case 'remodelacion': valUCD = 15; break;
+            case 'construccion': valUCD = 15; break;
+            case 'certificacionPlaca': valUCD = 3; break;
+            case 'otrasSolicitudes': valUCD = 15; break;
+            case 'inspeccionBebidas':
+                let m = parseFloat(document.getElementById('metrosBebidas')?.value);
+                if(isNaN(m) || m <= 0) { document.getElementById('resultadoTramite').innerHTML = '0,00 Bs'; return; }
+                valUCD = 0.20 * m;
+                break;
+            case 'copiasCertificados':
+                let f = parseInt(document.getElementById('numFolios')?.value);
+                if(isNaN(f) || f <= 0) { document.getElementById('resultadoTramite').innerHTML = '0,00 Bs'; return; }
+                valUCD = 1 + ((f - 1) * 0.4);
+                break;
+            case 'usoBienesPublicos':
+                let m2 = parseFloat(document.getElementById('metrosUso')?.value);
+                let d = parseInt(document.getElementById('diasUso')?.value);
+                if(isNaN(m2) || m2 <= 0 || isNaN(d) || d <= 0) { document.getElementById('resultadoTramite').innerHTML = '0,00 Bs'; return; }
+                valUCD = 0.10 * m2 * d;
+                break;
+            case 'habilitacionServicios': valUCD = 100; break;
+            default: valUCD = 0;
+        }
+        document.getElementById('resultadoTramite').innerHTML = format(valUCD * getUCD()) + ' Bs';
+    }
+
+    function updateSubcats() {
+        let tipo = document.getElementById('tipoConstruccion').value;
+        let sC = document.getElementById('subcategoriaContainer');
+        let zC = document.getElementById('zonaContainer');
+        let pH = document.getElementById('phContainer');
+        let iC = document.getElementById('industriaContainer');
+        sC.style.display = 'none';
+        zC.style.display = 'none';
+        pH.style.display = 'none';
+        iC.style.display = 'none';
+        if(!tipo) return;
+        if(tipo === 'unifamiliar') {
+            sC.style.display = 'block';
+            zC.style.display = 'block';
+            let sel = document.getElementById('subcategoriaConstruccion');
+            sel.innerHTML = '';
+            for(let [k,v] of Object.entries(construccionData.unifamiliar.subtipos)) {
+                sel.appendChild(new Option(v.label, k));
+            }
+        } else if(tipo === 'comercio' || tipo === 'oficinas') {
+            pH.style.display = 'block';
+            zC.style.display = 'block';
+        } else if(tipo === 'industria') {
+            pH.style.display = 'block';
+            iC.style.display = 'block';
+        } else if(tipo === 'multifamiliar') {
+            zC.style.display = 'block';
+        }
+        calcConstruccion();
+        calcTotal();
+    }
+
+    function calcAll() {
+        calcTerreno();
+        calcConstruccion();
+        calcTotal();
+        calcPlano();
+        calcTramite();
+    }
+
+    function openTab(ev, name) {
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+        document.getElementById(name).classList.add('active');
+        ev.currentTarget.classList.add('active');
+    }
+
+    // Eventos
+    function initEvents() {
+        document.getElementById('tipoTerreno').addEventListener('change', () => { calcTerreno(); calcTotal(); });
+        document.getElementById('areaTerreno').addEventListener('input', () => { calcTerreno(); calcTotal(); });
+        document.getElementById('tipoConstruccion').addEventListener('change', () => { updateSubcats(); calcTotal(); });
+        document.getElementById('subcategoriaConstruccion').addEventListener('change', () => { calcConstruccion(); calcTotal(); });
+        document.getElementById('zonaConstruccion').addEventListener('change', () => { calcConstruccion(); calcTotal(); });
+        document.getElementById('phConstruccion').addEventListener('change', () => { calcConstruccion(); calcTotal(); });
+        document.getElementById('industriaFactor').addEventListener('change', () => { calcConstruccion(); calcTotal(); });
+        document.getElementById('areaConstruccion').addEventListener('input', () => { calcConstruccion(); calcTotal(); });
+        document.getElementById('incluirInspeccion').addEventListener('change', function() {
+            document.getElementById('camposInspeccion').style.display = this.checked ? 'block' : 'none';
+            calcPlano();
+        });
+        document.getElementById('metrosPlanoInspeccion')?.addEventListener('input', calcPlano);
+        document.getElementById('tipoTramite').addEventListener('change', function() { showExtraFields(this.value); calcTramite(); });
+        
+        // UCD manual
+        const ucdInput = document.getElementById('ucdManual');
+        ucdInput.addEventListener('input', function() {
+            let val = parseFloat(this.value);
+            if(!isNaN(val) && val > 0) {
+                ucdManualValor = val;
+            } else {
+                ucdManualValor = null;
+            }
+            calcAll();
+        });
+    }
+
+    updateRates();
+    initEvents();
+    updateSubcats();
+    setInterval(updateRates, 300000);
+    window.openTab = openTab;
+</script>
+</body>
+</html>
