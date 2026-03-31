@@ -86,7 +86,7 @@
         }
 
 		.header-center img {height:76px}
-		.header-right img {height:76px}
+		.header-right img {height:82px}
 
 		.footer img {
             height: 45px;
@@ -363,6 +363,13 @@
             .ucd-manual { flex-direction: column; align-items: flex-start; }
             .ucd-manual input { width: 100%; }
 			.logo-tlabel {display:none}
+			.gobp1 {
+				font-size:9px;
+			}
+	
+			.gobp2 {
+				font-size:10px
+			}
         }
 
         .tab-content.active {
@@ -372,6 +379,14 @@
             from { opacity: 0; }
             to { opacity: 1; }
         }
+
+		.gobp1 {
+			color:rgba(0,0,0,.7);font-size:14px;
+		}
+
+		.gobp2 {
+			color:rgba(0,0,0,.8);font-size:16px
+		}
     </style>
 </head>
 <body>
@@ -381,8 +396,8 @@
         <div class="header-left">
             <img src="gob.png" alt="Gobierno" onerror="this.style.display='none'">
 			<div style="display:flex;flex-direction:column;text-wrap:nowrap">
-				<p style="color:rgba(0,0,0,.7);font-size:9px;">Alcaldia Bolivariana del Municipio</p>
-				<p style="color:rgba(0,0,0,.8);font-size:10px">G/D Pedro Leon Torres</p>
+				<p class="gobp1">Alcaldia Bolivariana del Municipio</p>
+				<p class="gobp2">G/D Pedro Leon Torres</p>
 			</div>
         </div>
         <div class="header-center">
