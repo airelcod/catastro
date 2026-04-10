@@ -258,7 +258,22 @@
             padding: 16px;
             text-align: center;
             margin-top: 16px;
+			width: 100%;
         }
+
+		.result-box-h {
+            background: rgba(255,255,255,.4);
+            border-radius: 4px;
+            padding: 16px;
+            text-align: center;
+            margin-top: 16px;
+			width: 100%;
+			opacity:.6;
+        }
+
+		.have {
+			opacity:1;
+		}
 
         .result-value {
             font-size: 22px;
@@ -524,10 +539,7 @@
                 <div class="card-title">Solicitud de Plano de Mensura</div>
                 <div class="card-subtitle">Trámite para levantamiento topográfico</div>
             </div>
-            <div class="result-box" style="margin-bottom:16px;">
-                <div class="result-value">15 UCD</div>
-                <div class="result-label">Valor base</div>
-            </div>
+            
             <div class="checkbox-group">
                 <input type="checkbox" id="incluirInspeccion">
                 <label for="incluirInspeccion">Incluye Inspección</label>
@@ -538,10 +550,28 @@
                     <input type="number" id="metrosPlanoInspeccion" placeholder="m²" step="any">
                 </div>
             </div>
-            <div class="result-box">
-                <div class="result-value" id="resultadoPlano">0,00 Bs</div>
-                <div class="result-label">Total a pagar</div>
-            </div>
+			<div class="res-box" style="width:100%;display:flex;gap:14px">
+            
+				<div class="result-box">
+	                <div class="result-value">15 UCD</div>
+	                <div class="result-label">Valor base</div>
+	            </div>
+				<div class="result-box">
+	                <div class="result-value" id="valorBs">0,00 Bs</div>
+	                <div class="result-label">Total a pagar</div>
+	            </div>
+					
+				<div class="result-box-h" id="res-o">
+	                <div class="result-value" id="valorUcd">15 UCD</div>
+	                <div class="result-label">Valor base</div>
+	            </div>
+				<div class="result-box-h" id="res-t">
+	                <div class="result-value" id="resultadoPlano">0,00 Bs</div>
+	                <div class="result-label">Total a pagar</div>
+	            </div>
+				
+			</div>
+			
         </div>
     </div>
 
@@ -653,6 +683,7 @@
         if (ucdManualValor !== null && !isNaN(ucdManualValor) && ucdManualValor > 0) {
             return ucdManualValor;
         }
+		
         return tasaMayorActual;
     }
 
@@ -686,6 +717,9 @@
         // Mostrar valor automático de UCD
         const autoSpan = document.getElementById('ucdAutoDisplay');
         if(autoSpan) autoSpan.innerHTML = `(Automático: ${format(tasaMayorActual)} Bs)`;
+
+		//PIN
+		document.getElementById('valorBs').innerHTML = format(15 * tasaMayorActual);
         
         calcAll();
     }
@@ -745,9 +779,11 @@
         let ins = 0;
         if(incluir) {
             let m = parseFloat(document.getElementById('metrosPlanoInspeccion')?.value);
+			//if (m !== null) { document.getElementById('res-o').classList.add('have'); document.getElementById('res-t').classList.add('have'); }else{ { document.getElementById('res-o').classList.remove('have'); document.getElementById('res-t').classList.remove('have'); } }
             if(!isNaN(m) && m > 0) ins = inspeccionUSD(m);
         }
         let total = (15 + ins) * getUCD();
+		document.getElementById('valorUcd').innerHTML = format((total / tasaMayorActual)) + ' UCD';
         document.getElementById('resultadoPlano').innerHTML = format(total) + ' Bs';
     }
 
@@ -871,10 +907,20 @@
         document.getElementById('areaConstruccion').addEventListener('input', () => { calcConstruccion(); calcTotal(); });
         document.getElementById('incluirInspeccion').addEventListener('change', function() {
             document.getElementById('camposInspeccion').style.display = this.checked ? 'block' : 'none';
+
+			if (document.getElementById('camposInspeccion').style.display == 'block') {
+				document.getElementById('res-o').classList.add('have');
+				document.getElementById('res-t').classList.add('have');
+			} else {
+				document.getElementById('res-o').classList.remove('have');
+				document.getElementById('res-t').classList.remove('have');
+			}
+			
             calcPlano();
         });
         document.getElementById('metrosPlanoInspeccion')?.addEventListener('input', calcPlano);
         document.getElementById('tipoTramite').addEventListener('change', function() { showExtraFields(this.value); calcTramite(); });
+		
         
         // UCD manual
         const ucdInput = document.getElementById('ucdManual');
